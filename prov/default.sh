@@ -26,13 +26,30 @@ EXTENSIONS=(
 )
 
 CHECKPOINT_MODELS=(
+    "https://civitai.com/api/download/models/72396"
+    "https://civitai.com/api/download/models/175339"
+    "https://civitai.com/api/download/models/90072"
+    "https://civitai.com/api/download/models/184538"
+    "https://civitai.com/api/download/models/130406"
+    "https://civitai.com/api/download/models/136739"
+    "https://civitai.com/api/download/models/191538"
+    "https://civitai.com/api/download/models/105796?type=Model&format=SafeTensor&size=full&fp=fp16"
+    "https://civitai.com/api/download/models/142125?type=Model&format=SafeTensor&size=full&fp=fp32"
+    "https://civitai.com/api/download/models/223670?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+    "https://civitai.com/api/download/models/261539?type=Model&format=SafeTensor&size=full&fp=fp16"
+    "https://civitai.com/api/download/models/252613?type=Model&format=SafeTensor&size=full&fp=fp16"
+    "https://civitai.com/api/download/models/246507"
+    "https://civitai.com/api/download/models/251594?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+    "https://civitai.com/api/download/models/237441?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+    "https://civitai.com/api/download/models/253055?type=Model&format=SafeTensor&size=full&fp=fp32"
 )
 
 LORA_MODELS=(
-    "https://civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com/model/3865/thiccV23.NWPw.safetensors?X-Amz-Expires=86400&response-content-disposition=attachment%3B%20filename%3D%22thicc_v2.3.safetensors%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e01358d793ad6966166af8b3064953ad/20231214/us-east-1/s3/aws4_request&X-Amz-Date=20231214T132809Z&X-Amz-SignedHeaders=host&X-Amz-Signature=40764fae31cea245e123719435c5b63b74358f474c895d15523201e6bb1dedd4"
+    "https://civitai.com/api/download/models/244947?type=Model&format=SafeTensor"
     "https://civitai.com/api/download/models/87153"
-    "https://civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com/833907/model/elixir.1Zkf.safetensors?X-Amz-Expires=86400&response-content-disposition=attachment%3B%20filename%3D%22Elixir.safetensors%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e01358d793ad6966166af8b3064953ad/20231123/us-east-1/s3/aws4_request&X-Amz-Date=20231123T225537Z&X-Amz-SignedHeaders=host&X-Amz-Signature=142210036ca3b3e448ca8efd87d63448be159111933aa9f64d83ae6c6af29120"
-    "https://civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com/1969604/model/addDetailXl.MLUV.safetensors?X-Amz-Expires=86400&response-content-disposition=attachment%3B%20filename%3D%22add-detail-xl.safetensors%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e01358d793ad6966166af8b3064953ad/20231123/us-east-1/s3/aws4_request&X-Amz-Date=20231123T225551Z&X-Amz-SignedHeaders=host&X-Amz-Signature=7993afbec8192118e686a76aa6c4335b658df93d43dc79566625fa6722f5f8b5"
+    "https://civitai.com/api/download/models/83081?type=Model&format=SafeTensor"
+    "https://civitai.com/api/download/models/87153?type=Model&format=SafeTensor"
+    "https://civitai.com/api/download/models/16576?type=Model&format=SafeTensor&size=full&fp=fp16"
 )
 
 VAE_MODELS=(
