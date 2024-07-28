@@ -1,31 +1,26 @@
-#!/bin/false
+#!/bin/bash
+
 # This file will be sourced in init.sh
-# Namespace functions with provisioning_
 
-# https://raw.githubusercontent.com/ai-dock/stable-diffusion-webui/main/config/provisioning/default.sh
+# https://raw.githubusercontent.com/ai-dock/comfyui/main/config/provisioning/default.sh
 
-### Edit the following arrays to suit your workflow
+# Packages are installed after nodes so we can fix them...
 
-DISK_GB_REQUIRED=30
+PYTHON_PACKAGES=(
+    #"opencv-python==4.7.0.72"
+)
 
-EXTENSIONS=(
-    "https://github.com/Mikubill/sd-webui-controlnet"
-    "https://github.com/d8ahazard/sd_dreambooth_extension"
-    "https://github.com/deforum-art/sd-webui-deforum"
-    "https://github.com/adieyal/sd-dynamic-prompts"
-    "https://github.com/ototadana/sd-face-editor"
-    "https://github.com/AlUlkesh/stable-diffusion-webui-images-browser"
-    "https://github.com/hako-mikan/sd-webui-regional-prompter"
-    "https://github.com/Coyote-A/ultimate-upscale-for-automatic1111"
-    "https://github.com/fkunn1326/openpose-editor"
-    "https://github.com/Gourieff/sd-webui-reactor"
-    "https://github.com/thomasasfk/sd-webui-aspect-ratio-helper.git"
-    "https://github.com/DominikDoom/a1111-sd-webui-tagcomplete.git"
-    "https://github.com/BlafKing/sd-civitai-browser-plus.git"
-
+NODES=(
+    "https://github.com/ltdrdata/ComfyUI-Manager"
+    "https://github.com/11cafe/comfyui-workspace-manager"
+    "https://github.com/pythongosssss/ComfyUI-Custom-Scripts"
 )
 
 CHECKPOINT_MODELS=(
+    #"https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt"
+    #"https://huggingface.co/stabilityai/stable-diffusion-2-1/resolve/main/v2-1_768-ema-pruned.ckpt"
+    #"https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors"
+    #"https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0.safetensors"
     "https://civitai.com/api/download/models/72396"
     "https://civitai.com/api/download/models/330531"
     "https://civitai.com/api/download/models/90072"
@@ -49,7 +44,6 @@ CHECKPOINT_MODELS=(
     "https://civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com/model/894473/perfectdeliberatev5.arcT.safetensors?X-Amz-Expires=86400&response-content-disposition=attachment%3B%20filename%3D%22perfectdeliberate_v5.safetensors%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e01358d793ad6966166af8b3064953ad/20231214/us-east-1/s3/aws4_request&X-Amz-Date=20231214T132714Z&X-Amz-SignedHeaders=host&X-Amz-Signature=09a086b29230ebc333b7e34ebc4a3999d3271dc4bf3103df6d81f237c910f309"
 )
 
-
 LORA_MODELS=(
     "https://civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com/model/3865/thiccV23.NWPw.safetensors?X-Amz-Expires=86400&response-content-disposition=attachment%3B%20filename%3D%22thicc_v2.3.safetensors%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e01358d793ad6966166af8b3064953ad/20231214/us-east-1/s3/aws4_request&X-Amz-Date=20231214T132809Z&X-Amz-SignedHeaders=host&X-Amz-Signature=40764fae31cea245e123719435c5b63b74358f474c895d15523201e6bb1dedd4"
     "https://civitai.com/api/download/models/87153"
@@ -72,6 +66,7 @@ ESRGAN_MODELS=(
 CONTROLNET_MODELS=(
     "https://huggingface.co/webui/ControlNet-modules-safetensors/resolve/main/control_canny-fp16.safetensors"
     #"https://huggingface.co/webui/ControlNet-modules-safetensors/resolve/main/control_depth-fp16.safetensors"
+    "https://huggingface.co/kohya-ss/ControlNet-diff-modules/resolve/main/diff_control_sd15_depth_fp16.safetensors"
     #"https://huggingface.co/webui/ControlNet-modules-safetensors/resolve/main/control_hed-fp16.safetensors"
     #"https://huggingface.co/webui/ControlNet-modules-safetensors/resolve/main/control_mlsd-fp16.safetensors"
     #"https://huggingface.co/webui/ControlNet-modules-safetensors/resolve/main/control_normal-fp16.safetensors"
@@ -103,49 +98,56 @@ function provisioning_start() {
     DISK_GB_USED=$(($(df --output=used -m "${WORKSPACE}" | tail -n1) / 1000))
     DISK_GB_ALLOCATED=$(($DISK_GB_AVAILABLE + $DISK_GB_USED))
     provisioning_print_header
-    provisioning_get_extensions
+    provisioning_get_nodes
+    provisioning_install_python_packages
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/models/Stable-diffusion" \
+        "${WORKSPACE}/storage/stable_diffusion/models/ckpt" \
         "${CHECKPOINT_MODELS[@]}"
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/models/Lora" \
+        "${WORKSPACE}/storage/stable_diffusion/models/lora" \
         "${LORA_MODELS[@]}"
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/extensions/sd-webui-controlnet/models" \
+        "${WORKSPACE}/storage/stable_diffusion/models/controlnet" \
         "${CONTROLNET_MODELS[@]}"
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/models/VAE" \
+        "${WORKSPACE}/storage/stable_diffusion/models/vae" \
         "${VAE_MODELS[@]}"
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/models/ESRGAN" \
+        "${WORKSPACE}/storage/stable_diffusion/models/esrgan" \
         "${ESRGAN_MODELS[@]}"
     provisioning_get_models \
-        "/opt/stable-diffusion-webui/embeddings" \
+        "${WORKSPACE}/storage/stable_diffusion/models/embeddings" \
         "${EMBEDDINGS[@]}"
     provisioning_print_end
 }
 
-function provisioning_get_extensions() {
-    for repo in "${EXTENSIONS[@]}"; do
+function provisioning_get_nodes() {
+    for repo in "${NODES[@]}"; do
         dir="${repo##*/}"
-        path="/opt/stable-diffusion-webui/extensions/${dir}"
+        path="/opt/ComfyUI/custom_nodes/${dir}"
         requirements="${path}/requirements.txt"
         if [[ -d $path ]]; then
             if [[ ${AUTO_UPDATE,,} != "false" ]]; then
-                printf "Updating extension: %s...\n" "${repo}"
+                printf "Updating node: %s...\n" "${repo}"
                 ( cd "$path" && git pull )
                 if [[ -e $requirements ]]; then
-                    micromamba -n webui run ${PIP_INSTALL} -r "$requirements"
+                    micromamba -n comfyui run ${PIP_INSTALL} -r "$requirements"
                 fi
             fi
         else
-            printf "Downloading extension: %s...\n" "${repo}"
-            git clone "${repo}" "${path}"
+            printf "Downloading node: %s...\n" "${repo}"
+            git clone "${repo}" "${path}" --recursive
             if [[ -e $requirements ]]; then
-                micromamba -n webui run ${PIP_INSTALL} -r "${requirements}"
+                micromamba -n comfyui run ${PIP_INSTALL} -r "${requirements}"
             fi
         fi
     done
+}
+
+function provisioning_install_python_packages() {
+    if [ ${#PYTHON_PACKAGES[@]} -gt 0 ]; then
+        micromamba -n comfyui run ${PIP_INSTALL} ${PYTHON_PACKAGES[*]}
+    fi
 }
 
 function provisioning_get_models() {
@@ -185,5 +187,3 @@ function provisioning_download() {
 }
 
 provisioning_start
-git clone https://github.com/mattjaybe/sd-wildcards.git
-cp -fv sd-wildcards/wildcards/* /opt/stable-diffusion-webui/extensions/sd-dynamic-prompts/wildcards/
