@@ -181,9 +181,15 @@ function provisioning_print_end() {
     printf "\nProvisioning complete:  Web UI will start now\n\n"
 }
 
+# # Download from $1 URL to $2 file path
+# function provisioning_download() {
+#     wget --header="Authorization: Bearer 577c5ff6825ad835ddd5439193a02b9f" -qnc --content-disposition --show-progress -e dotbytes="${3:-4M}" -P "$2" "$1"
+# }
+
 # Download from $1 URL to $2 file path
 function provisioning_download() {
-    wget --header="Authorization: Bearer 577c5ff6825ad835ddd5439193a02b9f" -qnc --content-disposition --show-progress -e dotbytes="${3:-4M}" -P "$2" "$1"
+    curl -L -H "Content-Type: application/json" -H "Authorization: Bearer 91ae4b3e37bc755c8410c08d008d86c7" -O -J --progress-bar --limit-rate "${3:-4M}" -o "$2/$(basename "$1")" "$1"
 }
+
 
 provisioning_start
